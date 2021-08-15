@@ -1,12 +1,9 @@
-import { PlusIcon } from '@heroicons/react/solid'
-import { useFormik } from 'formik'
 import React from 'react'
+import { PlusIcon } from '@heroicons/react/solid'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { postOnboardingData } from '../../../../api/onboardingHandlers'
 import { setOnboardingPreference, setOnboardingProgressState } from '../../../../state/Onboarding/onboardingActions'
-import validationHandler from '../../../../utils/validationHandler'
 import Tags from '../../../components/Tags/Tags'
 
 const TagsInfo = () => {
@@ -14,52 +11,26 @@ const TagsInfo = () => {
   const history = useHistory()
   const { onboardingPreference, progressState } = useSelector((state) => state.onboarding)
   const [tagInputVal, setTagInputVal] = useState('')
-  const formik = useFormik({
-    initialValues: {
-      linkedIn: '',
-      twitter: '',
-      instagram: '',
-      website: '',
-    },
-    // validationSchema: validationHandler().onboarding,
-    onSubmit: (val) => {
-      const onboardingPreferenceData = {
-        ...onboardingPreference,
-        ...val,
-      }
-      dispatch(setOnboardingPreference({ ...onboardingPreference, ...val }))
-      const postData = {
-        prefferedRepos: onboardingPreference.prefferedRepos,
-        firstName: onboardingPreference.firstName,
-        lastName: onboardingPreference.lastName,
-        role: onboardingPreference.role,
-        company: onboardingPreference.company,
-        introduction: onboardingPreference.introduction,
-        sideProjects: ['mysideproject.com'],
-        tags: onboardingPreference.tags,
-        twitter: onboardingPreference.twitter,
-        linkedin: onboardingPreference.instagram,
-        website: onboardingPreference.website,
-      }
-      dispatch(postOnboardingData(postData))
-      history.replace('/dashboard/home')
-    },
-  })
+  const [nextDisabled, setNextDisabled] = useState(true)
 
   const handleEnterOnInput = (e) => {
     let tagArray = onboardingPreference?.tags?.slice(0) || []
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && e.target.value.length) {
       tagArray.push({ tagName: e.target.value, isSelected: true })
-      dispatch(setOnboardingPreference({ ...onboardingPreference, tags: tagArray }))
+      dispatch(setOnboardingPreference({ tags: tagArray }))
       setTagInputVal('')
+      handleNextDisabled(tagArray)
     }
   }
 
   const handleAddTag = () => {
     let tagArray = onboardingPreference?.tags?.slice(0) || []
-    tagArray.push({ tagName: tagInputVal, isSelected: true })
-    dispatch(setOnboardingPreference({ ...onboardingPreference, tags: tagArray }))
-    setTagInputVal('')
+    if (tagInputVal.length) {
+      tagArray.push({ tagName: tagInputVal, isSelected: true })
+      dispatch(setOnboardingPreference({ tags: tagArray }))
+      setTagInputVal('')
+      handleNextDisabled(tagArray)
+    }
   }
 
   const handleNext = () => {
@@ -69,7 +40,17 @@ const TagsInfo = () => {
   const handleTagClick = (index) => {
     let tagArray = onboardingPreference?.tags?.slice(0)
     tagArray[index].isSelected = !tagArray[index].isSelected
-    dispatch(setOnboardingPreference({ ...onboardingPreference, tags: tagArray }))
+    dispatch(setOnboardingPreference({ tags: tagArray }))
+    handleNextDisabled(tagArray)
+  }
+
+  const handleNextDisabled = (tagsArray) => {
+    const selectedTags = tagsArray.filter(({ isSelected }) => !!isSelected)
+    if (selectedTags.length >= 5 && selectedTags.length <= 20) {
+      setNextDisabled(false)
+    } else {
+      setNextDisabled(true)
+    }
   }
 
   return (
@@ -83,7 +64,7 @@ const TagsInfo = () => {
           Tell us what are you interested in. We’ll help you get there
         </p>
         <p className="max-w-4xl text-xs text-black font-light">
-          Select up to 20 topics that best descripbe your Github Repos
+          Select up to 20 topics that best describe your Github Repos
         </p>
         <p className="max-w-4xl text-xs text-black font-light">We’ll customise your matches based on what you select</p>
       </div>
@@ -123,44 +104,12 @@ const TagsInfo = () => {
       </div>
       <button
         type="button"
-        className="inline-flex items-center justify-center lg:w-3/5 xl:w-2/4 w-full mt-20 px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        disabled={nextDisabled}
+        className={`inline-flex items-center justify-center lg:w-3/5 xl:w-2/4 w-full mt-20 px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white ${nextDisabled ? 'bg-gray-400 hover:bg-gray-500' : `bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`} `}
         onClick={handleNext}
       >
         Next
       </button>
-      {/* <form onSubmit={formik.handleSubmit} className="">
-        <div>
-          <div className="py-5 bg-white sm:py-6">
-            <div className="grid grid-cols-6 gap-6">
-              {SocialArray.map((platform) => (
-                <div className="col-span-6 sm:col-span-3" key={platform.dataTag}>
-                  <label htmlFor={platform.dataTag} className="block text-sm font-medium text-gray-700">
-                    {platform.name}
-                  </label>
-                  <input
-                    type="text"
-                    name={platform.dataTag}
-                    id={platform.dataTag}
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                    {...formik.getFieldProps(platform.dataTag)}
-                  />
-                  {formik.touched[platform.dataTag] && formik.errors[platform.dataTag] ? (
-                    <div className="text-red-700 text-sm">{formik.errors[platform.dataTag]}</div>
-                  ) : null}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="px-4 py-3 text-right sm:px-6">
-            <button
-              type="submit"
-              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              Finish
-            </button>
-          </div>
-        </div>
-      </form> */}
     </>
   )
 }

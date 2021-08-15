@@ -1,36 +1,41 @@
+import dayjs from 'dayjs'
 import React from 'react'
 import { useEffect } from 'react'
+import { weekDay } from '../../../utils/constants'
 
 const LoginPage = (props) => {
   const { location } = props
   useEffect(() => {
     localStorage.setItem('landingUrl', location?.state?.from?.pathname)
-  },[])
+  }, [])
   return (
     <div>
       <div className="min-h-screen bg-white flex">
-        <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 w-9/12">
-          <div className="mx-auto w-full max-w-sm lg:w-96">
+        <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 w-7/12">
+          <div className="mx-auto w-full max-w-lg text-center">
             <div>
-              <img
-                className="h-12 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-                alt="Workflow"
-              />
-              <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Midnight</h2>
+              <img className="h-12 w-auto m-auto" src="/assets/images/faces.png" alt="Workflow" />
+              <h2 className="mt-6 text-3xl font-bold text-gray-900">Happy {weekDay[dayjs().get('day')]}</h2>
             </div>
 
             <div className="mt-8">
               <div>
                 <div>
-                  <p className="text-sm mb-4 font-medium text-gray-700">Sign in to your account</p>
+                  <p className="text-sm mb-4 font-medium text-gray-700">
+                    Gitnight makes relevant connections between developers across globe to help each other and
+                    collaborate on your next project
+                  </p>
 
                   <div>
                     <button
-                      className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none"
-                      onClick={() => window.open(`${process.env.REACT_APP_API_URL}/auth/github?origin=${window.location.origin}`, '_self')}
+                      className="w-full lg:w-80 inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-black text-sm font-medium text-white hover:bg-gray-900 focus:outline-none"
+                      onClick={() =>
+                        window.open(
+                          `${process.env.REACT_APP_API_URL}/auth/github?origin=${window.location.origin}`,
+                          '_self',
+                        )
+                      }
                     >
-                      <span className="sr-only">Sign in with GitHub</span>
                       <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                         <path
                           fillRule="evenodd"
@@ -38,6 +43,7 @@ const LoginPage = (props) => {
                           clipRule="evenodd"
                         />
                       </svg>
+                      <span className="ml-2.5">Sign in with GitHub</span>
                     </button>
                   </div>
                 </div>
@@ -45,12 +51,8 @@ const LoginPage = (props) => {
             </div>
           </div>
         </div>
-        <div className="hidden lg:block relative w-3/12">
-          <img
-            className="absolute inset-0 h-full w-full object-cover"
-            src={`${window.location.origin}/assets/images/users.png`}
-            alt=""
-          />
+        <div className="hidden lg:block relative w-5/12">
+          <img className="absolute inset-0 h-full w-full object-cover" src={`/assets/images/login_page.jpg`} alt="" />
         </div>
       </div>
     </div>

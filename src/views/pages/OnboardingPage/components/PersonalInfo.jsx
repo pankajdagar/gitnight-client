@@ -3,29 +3,57 @@ import { useFormik } from 'formik'
 import validationHandler from 'utils/validationHandler'
 import { useDispatch, useSelector } from 'react-redux'
 import { setOnboardingPreference, setOnboardingProgressState } from 'state/Onboarding/onboardingActions'
-
-const SocialArray = [
-  { key: 1, name: 'LinkedIn', dataTag: 'linkedIn' },
-  { key: 2, name: 'Twitter', dataTag: 'twitter' },
-  { key: 5, name: 'Instagram', dataTag: 'instagram' },
-  { key: 6, name: 'Personal Site', dataTag: 'website' },
-]
+import { SocialArray } from '../../../../utils/constants'
+import { postOnboardingData } from '../../../../api/onboardingHandlers'
+import { useHistory } from 'react-router-dom'
 
 const PersonalInfo = () => {
   const dispatch = useDispatch()
-  const { data, onboardingPreference,progressState } = useSelector((state) => state.onboarding)
+  const { progressState, userData, onboardingPreference } = useSelector((state) => state.onboarding)
+  const history = useHistory()
   const formik = useFormik({
     initialValues: {
-      firstName: '',
-      lastName: '',
-      role: '',
-      company: '',
-      introduction: '',
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      introduction: userData.introduction,
+      linkedIn: userData.linkedIn,
+      twitter: userData.twitter,
+      instagram: userData.instagram,
+      website: userData.website,
+      sideProject1: '',
+      sideProject2: '',
+      country: 'India'
     },
-    validationSchema: validationHandler().onboarding,
+    // validationSchema: validationHandler().onboarding,
     onSubmit: (val) => {
-      dispatch(setOnboardingPreference({ ...onboardingPreference, ...val }))
-      dispatch(setOnboardingProgressState(3))
+      console.log(val)
+      const postData = {
+        prefferedRepos: onboardingPreference.repoIds,
+        firstName: val.firstName,
+        lastName: val.lastName,
+        introduction: val.introduction,
+        // sideProjects: [val.sideProject1,val.sideProject2],
+        tags: onboardingPreference.tags.filter(({ isSelected }) => !!isSelected).map(({ tagName }) => tagName),
+        twitter: val.twitter,
+        linkedin: val.linkedIn,
+        // instagram: val.instagram,
+        website: val.website,
+        role: 'Full stack developer',
+        company: '@Hashedin',
+        country: val.country,
+        languages: onboardingPreference.languages
+          .filter(({ isSelected }) => !!isSelected)
+          .map(({ languageName }) => languageName),
+      }
+      const sideProjects = [val.sideProject1,val.sideProject2].filter(item => item)
+      if(sideProjects.length) postData['sideProjects'] = sideProjects
+
+      try {
+        postOnboardingData(postData)
+        history.replace('/dashboard/home')
+      } catch (e) {
+        console.error(e)
+      }
     },
   })
 
@@ -47,90 +75,94 @@ const PersonalInfo = () => {
       </div>
       <form onSubmit={formik.handleSubmit} className="w-full h-full">
         <div className="space-y-8">
+          <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+            <div className="sm:col-span-4">
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                Username
+              </label>
+              <div className="mt-1 flex rounded-md shadow-sm">
+                <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
+                  gnight.com/
+                </span>
+                <input
+                  type="text"
+                  name="username"
+                  id="username"
+                  disabled
+                  className="flex-1 border-gray-300 bg-gray-50 text-gray-500 block w-full min-w-0 rounded-none rounded-r-md sm:text-sm"
+                  value={userData.username}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="py-1">
             <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-              <div className="sm:col-span-4">
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                  Username
+              <div className="sm:col-span-3">
+                <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
+                  First name
                 </label>
-                <div className="mt-1 flex rounded-md shadow-sm">
-                  <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
-                    gnight.com/
-                  </span>
+                <div className="mt-1">
                   <input
                     type="text"
-                    name="username"
-                    id="username"
-                    autoComplete="username"
-                    className="flex-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                    name="firstName"
+                    id="firstName"
+                    autoComplete="given-name"
+                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    {...formik.getFieldProps('firstName')}
                   />
                 </div>
               </div>
-            </div>
-            <div className="py-1">
-              <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                <div className="sm:col-span-3">
-                  <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                    First name
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      name="firstName"
-                      id="firstName"
-                      autoComplete="given-name"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                    />
-                  </div>
+              <div className="sm:col-span-3">
+                <label htmlFor="last-name" className="block text-sm font-medium text-gray-700">
+                  Last name
+                </label>
+                <div className="mt-1">
+                  <input
+                    type="text"
+                    name="lastName"
+                    id="lastName"
+                    autoComplete="family-name"
+                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    {...formik.getFieldProps('lastName')}
+                  />
                 </div>
-                <div className="sm:col-span-3">
-                  <label htmlFor="last-name" className="block text-sm font-medium text-gray-700">
-                    Last name
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      name="lastName"
-                      id="lastName"
-                      autoComplete="family-name"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                    />
-                  </div>
-                </div>
-                <div className="sm:col-span-3">
-                  <label htmlFor="country" className="block text-sm font-medium text-gray-700">
-                    Country / Region
-                  </label>
-                  <div className="mt-1">
-                    <select
-                      id="country"
-                      name="country"
-                      autoComplete="country"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                      >
-                      <option>India</option>
-                      <option>United States</option>
-                      <option>Canada</option>
-                    </select>
-                  </div>
+              </div>
+              <div className="sm:col-span-3">
+                <label htmlFor="country" className="block text-sm font-medium text-gray-700">
+                  Country / Region
+                </label>
+                <div className="mt-1">
+                  <select
+                    id="country"
+                    name="country"
+                    autoComplete="country"
+                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    {...formik.getFieldProps('country')}
+                  >
+                    <option>India</option>
+                    <option>United States</option>
+                    <option>Canada</option>
+                  </select>
                 </div>
               </div>
             </div>
-            <div className="sm:col-span-6 mt-6">
-              <label htmlFor="about" className="block text-sm font-medium text-gray-700">
-                About
-              </label>
-              <div className="mt-1">
-                <textarea
-                  id="about"
-                  name="about"
-                  rows={3}
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
-                  defaultValue={''}
-                />
-              </div>
-              <p className="mt-2 text-sm text-gray-500">Write a few sentences about yourself.</p>
+          </div>
+          <div className="sm:col-span-6 mt-6">
+            <label htmlFor="about" className="block text-sm font-medium text-gray-700">
+              About
+            </label>
+            <div className="mt-1">
+              <textarea
+                id="about"
+                name="about"
+                rows={3}
+                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                {...formik.getFieldProps('introduction')}
+              />
             </div>
-            <div className="py-4 bg-white sm:py-4">
+            <p className="mt-2 text-sm text-gray-500">Write a few sentences about yourself.</p>
+          </div>
+          <div className="py-4 bg-white sm:py-4">
             <p className="mb-4 max-w-4xl text-lg text-black font-semibold">Social Links</p>
             <div className="grid grid-cols-6 gap-6">
               {SocialArray.map((platform) => (
@@ -138,16 +170,43 @@ const PersonalInfo = () => {
                   <label htmlFor={platform.dataTag} className="block text-sm font-medium text-gray-700">
                     {platform.name}
                   </label>
-                  <input
-                    type="text"
-                    name={platform.dataTag}
-                    id={platform.dataTag}
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                    {...formik.getFieldProps(platform.dataTag)}
-                  />
-                  {formik.touched[platform.dataTag] && formik.errors[platform.dataTag] ? (
-                    <div className="text-red-700 text-sm">{formik.errors[platform.dataTag]}</div>
-                  ) : null}
+                  <div className="mt-1 flex rounded-md shadow-sm">
+                    {!!platform.prefix && (
+                      <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
+                        {platform.prefix}
+                      </span>
+                    )}
+                    <input
+                      type="text"
+                      name={platform.dataTag}
+                      id={platform.dataTag}
+                      className={`flex-1 border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 rounded-none rounded-r-md sm:text-sm ${
+                        !platform.prefix ? 'rounded-l-md' : ''
+                      }`}
+                      {...formik.getFieldProps(platform.dataTag)}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="py-4 bg-white sm:py-4">
+            <p className="mb-4 max-w-4xl text-lg text-black font-semibold">Side Projects</p>
+            <div className="grid grid-cols-6 gap-6">
+              {[1, 2].map((project) => (
+                <div className="col-span-6 sm:col-span-3" key={project}>
+                  <label htmlFor={`sideProject${project}}`} className="block text-sm font-medium text-gray-700">
+                    {`Side Project ${project}`}
+                  </label>
+                  <div className="mt-1 flex rounded-md shadow-sm">
+                    <input
+                      type="text"
+                      name={`sideProject${project}`}
+                      id={project}
+                      className="flex-1 border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 rounded-md sm:text-sm"
+                      {...formik.getFieldProps(`sideProject${project}`)}
+                    />
+                  </div>
                 </div>
               ))}
             </div>

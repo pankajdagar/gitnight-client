@@ -14,7 +14,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) => {
-        return cookies.hasOwnProperty('token') ? (
+        return !cookies.hasOwnProperty('token') ? (
           <Component {...props} />
         ) : (
           <Redirect

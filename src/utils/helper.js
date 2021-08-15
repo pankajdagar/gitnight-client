@@ -5,3 +5,7 @@ export const queryString = (params) =>
       return key + '=' + value
     })
     .join('&')
+
+export const classNames = (...classes) => {
+  return classes.filter(Boolean).join(' ')
+}

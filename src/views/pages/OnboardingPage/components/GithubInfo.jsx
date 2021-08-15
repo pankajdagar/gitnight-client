@@ -1,31 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  setOnboardingPreference,
-  setOnboardingProgressState,
-} from 'state/Onboarding/onboardingActions'
-import { MinusSmIcon, PlusIcon, PlusSmIcon } from '@heroicons/react/solid'
+import { setOnboardingPreference, setOnboardingProgressState } from 'state/Onboarding/onboardingActions'
+import { MinusSmIcon, PlusSmIcon } from '@heroicons/react/solid'
 import Tags from '../../../components/Tags/Tags'
+import { searchRepo } from '../../../../api/onboardingHandlers'
 
 const GithubInfo = () => {
   const dispatch = useDispatch()
-  const { loading, data, error, progressState, onboardingPreference } = useSelector((state) => state.onboarding)
-  const [ghLanguages, setGhLanguages] = useState([])
-
-  useEffect(() => {
-    fetch('https://raw.githubusercontent.com/ozh/github-colors/master/colors.json')
-      .then((res) => res.json())
-      .then((res) => {
-        let languageArray = []
-        Object.keys(res).forEach((key) =>
-          languageArray.push({
-            name: key,
-            languageInfo: res[key],
-          }),
-        )
-        setGhLanguages(languageArray)
-      })
-  }, [])
+  const { loading, repoData, error, progressState, onboardingPreference } = useSelector((state) => state.onboarding)
+  let timer = useRef(null)
+  const [isSearching, setIsSearching] = useState(false)
 
   const handleNext = () => {
     dispatch(setOnboardingProgressState(progressState + 1))
@@ -37,12 +21,28 @@ const GithubInfo = () => {
 
   const handleAddOrRemoveRepo = (repo) => {
     let repos = onboardingPreference?.repos?.slice(0) || []
-    if (repos.includes(repo)) {
-      repos.splice(repos.indexOf(repo), 1)
+    let repoIds = onboardingPreference?.repoIds?.slice(0) || []
+    console.log(repos,repoIds)
+    if (repoIds.includes(repo.id)) {
+      repos.splice(repoIds.indexOf(repo.id), 1)
+      repoIds.splice(repoIds.indexOf(repo.id), 1)
     } else {
       repos.push(repo)
+      repoIds.push(repo.id)
     }
-    dispatch(setOnboardingPreference({ ...onboardingPreference, repos }))
+    dispatch(setOnboardingPreference({ repos, repoIds }))
+  }
+
+  const handleRepoSearch = (e) => {
+    if (e.target.value.length) {
+      setIsSearching(true)
+    } else {
+      setIsSearching(false)
+    }
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      dispatch(searchRepo({ q: e.target.value }))
+    }, 500)
   }
 
   return (
@@ -76,56 +76,48 @@ const GithubInfo = () => {
           id="tags"
           className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block sm:text-sm border-gray-300 rounded-md w-3/5 lg:w-2/5"
           placeholder="Search Repository"
-          // onKeyUp={handleEnterOnInput}
-          // onChange={(e) => setTagInputVal(e.target.value)}
+          onChange={handleRepoSearch}
           // value={tagInputVal}
         />
-        <button
-          type="button"
-          className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          // onClick={handleAddOrRemoveRepo}
-        >
-          <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-          Add
-        </button>
       </div>
       <div className="mt-10">
         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-          TOP 6 REPOSITORY WITH MOST STARS &#127775;
+          {!isSearching ? `TOP 6 REPOSITORY WITH MOST STARS 🌟` : `Search Results`}
         </h3>
         <ul role="list" className="mt-4 border-t border-b border-gray-200 divide-y divide-gray-200 lg:w-2/4">
-          {data?.repos.map((repo) => (
-            <li key={repo.id} className="py-4 flex items-center justify-between space-x-3">
-              <div className="min-w-0 flex-1 flex items-center space-x-3">
+          {!!repoData?.length &&
+            repoData.map((repo) => (
+              <li key={repo.id} className="py-4 flex items-center justify-between space-x-3">
+                <div className="min-w-0 flex-1 flex items-center space-x-3">
+                  <div className="flex-shrink-0">
+                    {/* <img className="h-10 w-10 rounded-full" src={person.imageUrl} alt="" /> */}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-gray-900 truncate">{repo.name}</p>
+                    <p className="text-sm font-medium text-gray-500 truncate">{repo.description}</p>
+                  </div>
+                </div>
                 <div className="flex-shrink-0">
-                  {/* <img className="h-10 w-10 rounded-full" src={person.imageUrl} alt="" /> */}
+                  <button
+                    type="button"
+                    className="inline-flex items-center py-2 px-3 border border-transparent rounded-full bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    onClick={() => handleAddOrRemoveRepo(repo)}
+                  >
+                    {!onboardingPreference?.repoIds?.includes(repo.id) ? (
+                      <>
+                        <PlusSmIcon className="-ml-1 mr-0.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                        <span className="text-sm font-medium text-gray-900">Add</span>
+                      </>
+                    ) : (
+                      <>
+                        <MinusSmIcon className="-ml-1 mr-0.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                        <span className="text-sm font-medium text-gray-900">Remove</span>
+                      </>
+                    )}
+                  </button>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-gray-900 truncate">{repo.name}</p>
-                  <p className="text-sm font-medium text-gray-500 truncate">{repo.description}</p>
-                </div>
-              </div>
-              <div className="flex-shrink-0">
-                <button
-                  type="button"
-                  className="inline-flex items-center py-2 px-3 border border-transparent rounded-full bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  onClick={() => handleAddOrRemoveRepo(repo)}
-                >
-                  {!onboardingPreference?.repos?.includes(repo) ? (
-                    <>
-                      <PlusSmIcon className="-ml-1 mr-0.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                      <span className="text-sm font-medium text-gray-900">Add</span>
-                    </>
-                  ) : (
-                    <>
-                      <MinusSmIcon className="-ml-1 mr-0.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                      <span className="text-sm font-medium text-gray-900">Remove</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </li>
-          ))}
+              </li>
+            ))}
         </ul>
         <button
           type="button"

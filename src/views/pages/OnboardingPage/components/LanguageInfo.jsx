@@ -4,24 +4,13 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setOnboardingPreference, setOnboardingProgressState } from '../../../../state/Onboarding/onboardingActions'
 import Tags from '../../../components/Tags/Tags'
+import Select from 'components/Select/Select'
+import { allLanguages } from 'utils/constants'
 
 const LanguageInfo = () => {
   const dispatch = useDispatch()
-  const { onboardingPreference, progressState, data } = useSelector((state) => state.onboarding)
-  const [tagInputVal, setTagInputVal] = useState('')
-
-  useEffect(() => {
-    dispatch(setOnboardingPreference({ ...onboardingPreference, languages: data?.languages }))
-  }, [])
-
-  const handleEnterOnInput = (e) => {
-    let tagArray = onboardingPreference?.tags?.slice(0) || []
-    if (e.key === 'Enter') {
-      tagArray.push(e.target.value)
-      dispatch(setOnboardingPreference({ ...onboardingPreference, tags: tagArray }))
-      setTagInputVal('')
-    }
-  }
+  const { onboardingPreference, progressState } = useSelector((state) => state.onboarding)
+  const [nextDisabled, setNextDisabled] = useState(true)
 
   const handleNext = () => {
     dispatch(setOnboardingProgressState(progressState + 1))
@@ -34,7 +23,24 @@ const LanguageInfo = () => {
   const handleTagClick = (index) => {
     let languageArray = onboardingPreference?.languages.slice(0) || []
     languageArray[index].isSelected = !languageArray[index].isSelected
-    dispatch(setOnboardingPreference({ ...onboardingPreference, languages: languageArray }))
+    dispatch(setOnboardingPreference({ languages: languageArray }))
+    handleNextDisabled(languageArray)
+  }
+
+  const handleLanguageSelect = (languageInfo) => {
+    let languageArray = onboardingPreference?.languages.slice(0) || []
+    languageArray.push(languageInfo)
+    dispatch(setOnboardingPreference({ languages: languageArray }))
+    handleNextDisabled(languageArray)
+  }
+
+  const handleNextDisabled = (languageArray) => {
+    const selectedLanguage = languageArray.filter(({isSelected}) => !!isSelected)
+    if(selectedLanguage.length >= 5) {
+      setNextDisabled(false)
+    } else {
+      setNextDisabled(true)
+    }
   }
 
   return (
@@ -52,8 +58,8 @@ const LanguageInfo = () => {
       </div>
       <div className="bg-white my-8 w-4/5 lg:w-4/5">
         <div className="px-4 py-5 sm:p-6 flex flex-wrap items-center">
-          {!!data?.languages?.length ? (
-            data?.languages.map(({ languageName, isSelected }, index) => (
+          {!!onboardingPreference?.languages?.length ? (
+            onboardingPreference?.languages.map(({ languageName, isSelected }, index) => (
               <Tags key={index} index={index} text={languageName} onTagClick={handleTagClick} isSelected={isSelected} />
             ))
           ) : (
@@ -62,27 +68,7 @@ const LanguageInfo = () => {
         </div>
       </div>
       <div className="mt-1 flex gap-3 p-1">
-        <label htmlFor="email" className="sr-only">
-          Topic
-        </label>
-        <input
-          type="text"
-          name="tags"
-          id="tags"
-          className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block sm:text-sm border-gray-300 rounded-md w-3/5 lg:w-2/5"
-          placeholder="Add your own language"
-          // onKeyUp={handleEnterOnInput}
-          // onChange={(e) => setTagInputVal(e.target.value)}
-          // value={tagInputVal}
-        />
-        <button
-          type="button"
-          className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          // onClick={handleAddTag}
-        >
-          <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-          Add
-        </button>
+        <Select data={allLanguages} onSelect={handleLanguageSelect} />
       </div>
       <div>
         <button
@@ -94,7 +80,8 @@ const LanguageInfo = () => {
         </button>
         <button
           type="button"
-          className="inline-flex items-center justify-center lg:w-2/5 xl:w-1/4 w-full mt-10 px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          disabled={nextDisabled}
+          className={`inline-flex items-center justify-center lg:w-3/5 xl:w-2/4 w-full mt-20 px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white ${nextDisabled ? 'bg-gray-400 hover:bg-gray-500' : `bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`} `}
           onClick={handleNext}
         >
           Next
