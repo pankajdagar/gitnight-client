@@ -1,0 +1,21 @@
+@import '~github-calendar/dist/github-calendar.css';
+@import '~github-calendar/dist/github-calendar-responsive.css';
+
+.width-full > .float-left {
+  display: none;
+}
+.width-full > .float-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: flex-end;
+}
+.width-full svg {
+  margin: 0 2px;
+}
+#github-container{
+  border: 1px solid #DDDDDD;
+  border-radius: 3px;
+  min-height: 243px;
+  text-align: center;
+}
