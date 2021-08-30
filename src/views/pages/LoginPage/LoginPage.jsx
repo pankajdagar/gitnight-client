@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 const LoginPage = (props) => {
   const { location } = props
   useEffect(() => {
-    localStorage.setItem('landingUrl', location?.state?.from?.pathname)
+    location?.state?.from?.pathname && localStorage.setItem('landingUrl', location?.state?.from?.pathname)
   }, [])
   return (
     <div>
