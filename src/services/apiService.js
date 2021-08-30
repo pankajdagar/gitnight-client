@@ -87,7 +87,7 @@ const JWTHeaders = () => {
   const authorizationToken = cookies.get('token')
   return {
     'content-type': 'application/json',
-    X_DEVICE_ID: 'Web',
+    // X_DEVICE_ID: 'Web',
     Authorization: authorizationToken ? `Bearer ${authorizationToken}` : null,
   }
 }

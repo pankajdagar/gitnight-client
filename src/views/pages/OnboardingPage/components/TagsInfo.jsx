@@ -2,13 +2,11 @@ import React from 'react'
 import { PlusIcon } from '@heroicons/react/solid'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
 import { setOnboardingPreference, setOnboardingProgressState } from '../../../../state/Onboarding/onboardingActions'
 import Tags from '../../../components/Tags/Tags'
 
 const TagsInfo = () => {
   const dispatch = useDispatch()
-  const history = useHistory()
   const { onboardingPreference, progressState } = useSelector((state) => state.onboarding)
   const [tagInputVal, setTagInputVal] = useState('')
   const [nextDisabled, setNextDisabled] = useState(true)

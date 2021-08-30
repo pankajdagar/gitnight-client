@@ -1,5 +1,6 @@
 import React from 'react'
 import { PlusIcon } from '@heroicons/react/outline'
+import { CheckIcon } from '@heroicons/react/solid'
 
 const SocialIntegrationCard = ({ platform, onConnectClick }) => {
   return (
@@ -11,14 +12,22 @@ const SocialIntegrationCard = ({ platform, onConnectClick }) => {
       </div>
       <button
         className={`flex items-center justify-center text-sm font-semibold text-white p-2 rounded-md my-3 ${
-          !platform.isAvailable ? 'cursor-not-allowed bg-gray-400' : 'bg-blue-500'
+          !platform.isAvailable ? 'cursor-not-allowed bg-gray-400' : !!platform.isConnected ? 'bg-green-500' : 'bg-blue-500'
         }`}
         disabled={!platform.isAvailable}
-        onClick={onConnectClick}
+        onClick={!platform.isConnected ? onConnectClick : null}
       >
         {!!platform.isAvailable ? (
           <>
-            <PlusIcon className="w-5 h-5 mr-2" aria-hidden="true" /> CONNECT
+            {!!platform.isConnected ? (
+              <>
+                <CheckIcon className="w-5 h-5 mr-2" aria-hidden="true" /> CONNECTED
+              </>
+            ) : (
+              <>
+                <PlusIcon className="w-5 h-5 mr-2" aria-hidden="true" /> CONNECT
+              </>
+            )}
           </>
         ) : (
           <>COMING SOON</>

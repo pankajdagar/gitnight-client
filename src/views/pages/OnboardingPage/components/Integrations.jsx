@@ -1,11 +1,12 @@
 import React from 'react'
-import { PlusIcon } from '@heroicons/react/outline'
 import { ReactComponent as IconGoogle } from 'icons/IconGoogle.svg'
 import { ReactComponent as IconSlack } from 'icons/IconSlack.svg'
 import { ReactComponent as IconZoom } from 'icons/IconZoom.svg'
 import { ReactComponent as IconStripe } from 'icons/IconStripe.svg'
 import SocialIntegrationCard from '../../../components/SocialIntegrationCard/SocialIntegrationCard'
 import GoogleSignIn from './GoogleSignIn'
+import { useDispatch, useSelector } from 'react-redux'
+import { setOnboardingProgressState } from '../../../../state/Onboarding/onboardingActions'
 
 const platforms = [
   {
@@ -46,6 +47,12 @@ const platforms = [
 ]
 
 const Integrations = () => {
+  const dispatch = useDispatch()
+  const { progressState } = useSelector((state) => state.onboarding)
+  const handleDashboardRedirect = () => {
+    dispatch(setOnboardingProgressState(progressState + 1))
+  }
+
   return (
     <>
       <div className="pb-5">
@@ -55,11 +62,19 @@ const Integrations = () => {
         </h3>
       </div>
       <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 mt-4">
-      <GoogleSignIn />
+        <GoogleSignIn />
         {platforms.map((platform) => (
-          <SocialIntegrationCard platform={platform}/>
+          <SocialIntegrationCard platform={platform} key={platform.name} />
         ))}
       </ul>
+      <div className="py-14">
+        <button
+          className="lg:w-3/5 xl:w-2/4 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600"
+          onClick={handleDashboardRedirect}
+        >
+          Dashboard
+        </button>
+      </div>
     </>
   )
 }

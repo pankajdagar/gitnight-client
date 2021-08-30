@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { classNames } from '../../../utils/helper'
+import { useSelector } from 'react-redux'
 
 const userNavigation = [
   { name: 'New Update', href: '#' },
@@ -9,6 +10,7 @@ const userNavigation = [
 ]
 
 const ProfileDropDown = () => {
+  const { user } = useSelector((state) => state.user)
   return (
     <Menu as="div" className="ml-3 relative">
       {({ open }) => (
@@ -47,7 +49,7 @@ const ProfileDropDown = () => {
                     )}
                   >
                     <p>Signed in as</p>
-                    <p>{}</p>
+                    <p className="font-semibold">{user.username}</p>
                   </a>
                 )}
               </Menu.Item>

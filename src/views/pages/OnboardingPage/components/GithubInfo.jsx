@@ -7,7 +7,7 @@ import { searchRepo } from '../../../../api/onboardingHandlers'
 
 const GithubInfo = () => {
   const dispatch = useDispatch()
-  const { loading, repoData, error, progressState, onboardingPreference } = useSelector((state) => state.onboarding)
+  const { repoData, progressState, onboardingPreference } = useSelector((state) => state.onboarding)
   let timer = useRef(null)
   const [isSearching, setIsSearching] = useState(false)
 
@@ -84,7 +84,7 @@ const GithubInfo = () => {
         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
           {!isSearching ? `TOP 6 REPOSITORY WITH MOST STARS 🌟` : `Search Results`}
         </h3>
-        <ul role="list" className="mt-4 border-t border-b border-gray-200 divide-y divide-gray-200 lg:w-2/4">
+        <ul className="mt-4 border-t border-b border-gray-200 divide-y divide-gray-200 lg:w-2/4">
           {!!repoData?.length &&
             repoData.map((repo) => (
               <li key={repo.id} className="py-4 flex items-center justify-between space-x-3">

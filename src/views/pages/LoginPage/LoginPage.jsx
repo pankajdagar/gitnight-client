@@ -1,7 +1,6 @@
 import dayjs from 'dayjs'
 import React from 'react'
 import { useEffect } from 'react'
-import { weekDay } from '../../../utils/constants'
 
 const LoginPage = (props) => {
   const { location } = props
@@ -15,7 +14,7 @@ const LoginPage = (props) => {
           <div className="mx-auto w-full max-w-lg text-center">
             <div>
               <img className="h-12 w-auto m-auto" src="/assets/images/faces.png" alt="Workflow" />
-              <h2 className="mt-6 text-3xl font-bold text-gray-900">Happy {weekDay[dayjs().get('day')]}</h2>
+              <h2 className="mt-6 text-3xl font-bold text-gray-900">Happy {dayjs().format('dddd')}</h2>
             </div>
 
             <div className="mt-8">

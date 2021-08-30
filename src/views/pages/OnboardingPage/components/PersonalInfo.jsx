@@ -1,16 +1,15 @@
 import React from 'react'
-import { useFormik } from 'formik'
+import { FieldArray, FormikProvider, useFormik } from 'formik'
 import validationHandler from 'utils/validationHandler'
 import { useDispatch, useSelector } from 'react-redux'
-import { setOnboardingPreference, setOnboardingProgressState } from 'state/Onboarding/onboardingActions'
+import { setOnboardingProgressState } from 'state/Onboarding/onboardingActions'
 import { SocialArray } from '../../../../utils/constants'
 import { postOnboardingData } from '../../../../api/onboardingHandlers'
-import { useHistory } from 'react-router-dom'
+import { PlusIcon } from '@heroicons/react/solid'
 
 const PersonalInfo = () => {
-  const dispatch = useDispatch()
   const { progressState, userData, onboardingPreference } = useSelector((state) => state.onboarding)
-  const history = useHistory()
+  const dispatch = useDispatch()
   const formik = useFormik({
     initialValues: {
       firstName: userData.firstName,
@@ -18,39 +17,33 @@ const PersonalInfo = () => {
       introduction: userData.introduction,
       linkedIn: userData.linkedIn,
       twitter: userData.twitter,
-      instagram: userData.instagram,
       website: userData.website,
-      sideProject1: '',
-      sideProject2: '',
-      country: 'India'
+      github: userData.username,
+      country: 'India',
+      sideProjects: [''],
     },
     // validationSchema: validationHandler().onboarding,
-    onSubmit: (val) => {
-      console.log(val)
+    onSubmit: async (val) => {
       const postData = {
         prefferedRepos: onboardingPreference.repoIds,
         firstName: val.firstName,
         lastName: val.lastName,
         introduction: val.introduction,
-        // sideProjects: [val.sideProject1,val.sideProject2],
         tags: onboardingPreference.tags.filter(({ isSelected }) => !!isSelected).map(({ tagName }) => tagName),
         twitter: val.twitter,
         linkedin: val.linkedIn,
-        // instagram: val.instagram,
         website: val.website,
-        role: 'Full stack developer',
-        company: '@Hashedin',
         country: val.country,
         languages: onboardingPreference.languages
           .filter(({ isSelected }) => !!isSelected)
           .map(({ languageName }) => languageName),
       }
-      const sideProjects = [val.sideProject1,val.sideProject2].filter(item => item)
-      if(sideProjects.length) postData['sideProjects'] = sideProjects
-
+      const sideProjects = val.sideProjects.filter((item) => item.length)
+      if (sideProjects.length) postData['sideProjects'] = sideProjects
+      console.log(postData)
       try {
-        postOnboardingData(postData)
-        history.replace('/dashboard/home')
+        await postOnboardingData(postData)
+        dispatch(setOnboardingProgressState(progressState + 1))
       } catch (e) {
         console.error(e)
       }
@@ -69,7 +62,7 @@ const PersonalInfo = () => {
         </h3>
         <p className="mt-12 mb-4 max-w-4xl text-lg text-black font-semibold">Personal Information</p>
         <p className="max-w-4xl text-xs text-black font-light">
-          Your basic information will be shown in your matches every week.{' '}
+          Your basic information will be shown in your matches every week.
         </p>
         <p className="max-w-4xl text-xs text-black font-light">Tell us what you‘d like yo show!</p>
       </div>
@@ -191,25 +184,45 @@ const PersonalInfo = () => {
             </div>
           </div>
           <div className="py-4 bg-white sm:py-4">
-            <p className="mb-4 max-w-4xl text-lg text-black font-semibold">Side Projects</p>
-            <div className="grid grid-cols-6 gap-6">
-              {[1, 2].map((project) => (
-                <div className="col-span-6 sm:col-span-3" key={project}>
-                  <label htmlFor={`sideProject${project}}`} className="block text-sm font-medium text-gray-700">
-                    {`Side Project ${project}`}
-                  </label>
-                  <div className="mt-1 flex rounded-md shadow-sm">
-                    <input
-                      type="text"
-                      name={`sideProject${project}`}
-                      id={project}
-                      className="flex-1 border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 rounded-md sm:text-sm"
-                      {...formik.getFieldProps(`sideProject${project}`)}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
+            <FormikProvider value={formik}>
+              <FieldArray name="sideProjects">
+                {(arrayHelpers) => (
+                  <>
+                    <div className="flex items-center space-x-5 mb-4">
+                      <p className="max-w-4xl text-lg text-black font-semibold">Side Projects</p>
+                      <button
+                        type="button"
+                        className="inline-flex items-center px-4 py-1 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        onClick={() => arrayHelpers.push('')}
+                      >
+                        <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                        Add Project
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-6 gap-6">
+                      {formik.values.sideProjects.map((project, i) => {
+                        return (
+                          <div className="col-span-6 sm:col-span-3" key={i}>
+                            <label htmlFor={`sideProjects.${i}`} className="block text-sm font-medium text-gray-700">
+                              {`Side Project ${i + 1}`}
+                            </label>
+                            <div className="mt-1 flex rounded-md shadow-sm">
+                              <input
+                                type="text"
+                                name={`sideProjects.${i}`}
+                                id={i}
+                                className="flex-1 border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 rounded-md sm:text-sm"
+                                {...formik.getFieldProps(`sideProjects.${i}`)}
+                              />
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </>
+                )}
+              </FieldArray>
+            </FormikProvider>
           </div>
         </div>
         <div className="py-10">

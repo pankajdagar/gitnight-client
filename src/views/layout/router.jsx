@@ -7,6 +7,8 @@ import { authRequest } from '../../services/apiService'
 import { useDispatch } from 'react-redux'
 import { setUserData } from '../../state/User/userActions'
 import OnboardingPage from '../pages/OnboardingPage/'
+import Layout from '.'
+import ScheduleConnection from '../pages/ScheduleConnectionPage/ScheduleConnection'
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const [cookies] = useCookies(['token'])
@@ -14,7 +16,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) => {
-        return !cookies.hasOwnProperty('token') ? (
+        return cookies.hasOwnProperty('token') ? (
           <Component {...props} />
         ) : (
           <Redirect
@@ -49,11 +51,20 @@ const Router = () => {
   }
   return (
     <Switch>
+      <ProtectedRoute path="/dashboard/welcome" component={OnboardingPage} exact />
+      <AppWithLayout />
+    </Switch>
+  )
+}
+
+const AppWithLayout = () => {
+  return (
+    <Layout>
       <ProtectedRoute path="/dashboard" component={FullScreenLoader} exact />
       <ProtectedRoute path="/dashboard/home" component={HomePage} exact />
-      <ProtectedRoute path="/dashboard/welcome" component={OnboardingPage} exact />
-      <ProtectedRoute path="/dashboard/hi" component={HomePage} exact />
-    </Switch>
+      {/* <ProtectedRoute path="/dashboard/welcome" component={OnboardingPage} exact /> */}
+      <ProtectedRoute path="/dashboard/schedule" component={ScheduleConnection} exact />
+    </Layout>
   )
 }
 

@@ -37,8 +37,9 @@ export const getUserData = () => async (dispatch) => {
     return Promise.reject(error)
   } else {
     const userData = response.data
-    const tagsData =
-      response.data.tags.length && response.data.tags.map((tags) => ({ tagName: tags, isSelected: false }))
+    const tagsData = response.data.tags.length
+      ? response.data.tags.map((tags) => ({ tagName: tags, isSelected: false }))
+      : []
     const onboardingPreference = { tags: tagsData }
     dispatch(setOnboardingPreference(onboardingPreference))
     dispatch(getUserDataSuccess(userData))
@@ -48,7 +49,7 @@ export const getUserData = () => async (dispatch) => {
 
 export const searchRepo = (query) => async (dispatch) => {
   dispatch(searchRepoDataRequest)
-  const [error, response] = await authRequest.get('/user/repos/search',query)
+  const [error, response] = await authRequest.get('/user/repos/search', query)
   if (error || !response?.data) {
     dispatch(searchRepoDataFailure)
     return Promise.reject(error)

@@ -1,11 +1,9 @@
 export const SocialArray = [
   { key: 1, name: 'LinkedIn', dataTag: 'linkedIn', prefix: 'linkedin.com/in/' },
   { key: 2, name: 'Twitter', dataTag: 'twitter', prefix: 'twitter.com/' },
-  { key: 3, name: 'Instagram', dataTag: 'instagram', prefix: 'instagram.com/' },
+  { key: 3, name: 'Github', dataTag: 'github', prefix: 'github.com/' },
   { key: 4, name: 'Personal Site', dataTag: 'website', prefix: null },
 ]
-
-export const weekDay = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
 export const allLanguages = [
   {

@@ -1,5 +1,4 @@
-import { PlusIcon } from '@heroicons/react/solid'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setOnboardingPreference, setOnboardingProgressState } from '../../../../state/Onboarding/onboardingActions'
@@ -21,14 +20,14 @@ const LanguageInfo = () => {
   }
 
   const handleTagClick = (index) => {
-    let languageArray = onboardingPreference?.languages.slice(0) || []
+    let languageArray = onboardingPreference?.languages?.slice(0) || []
     languageArray[index].isSelected = !languageArray[index].isSelected
     dispatch(setOnboardingPreference({ languages: languageArray }))
     handleNextDisabled(languageArray)
   }
 
   const handleLanguageSelect = (languageInfo) => {
-    let languageArray = onboardingPreference?.languages.slice(0) || []
+    let languageArray = onboardingPreference?.languages?.slice(0) || []
     languageArray.push(languageInfo)
     dispatch(setOnboardingPreference({ languages: languageArray }))
     handleNextDisabled(languageArray)
