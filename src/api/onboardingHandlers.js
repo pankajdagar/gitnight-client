@@ -25,6 +25,7 @@ export const getRepoData = () => async (dispatch) => {
     }
     dispatch(getRepoDataSuccess(response.data.repos))
     dispatch(setOnboardingPreference(languageData))
+    dispatch(getUserData())
     return Promise.resolve(response)
   }
 }
@@ -61,6 +62,15 @@ export const searchRepo = (query) => async (dispatch) => {
 
 export const postOnboardingData = async (data) => {
   const [error, response] = await authRequest.post('/onboarding', data)
+  if (error) {
+    return Promise.reject(error)
+  } else {
+    return Promise.resolve(response)
+  }
+}
+
+export const getUserCity = async () => {
+  const [error, response] = await authRequest.customGet('https://freegeoip.app/json/')
   if (error) {
     return Promise.reject(error)
   } else {

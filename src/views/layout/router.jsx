@@ -9,6 +9,7 @@ import { setUserData } from '../../state/User/userActions'
 import OnboardingPage from '../pages/OnboardingPage/'
 import Layout from '.'
 import ScheduleConnection from '../pages/ScheduleConnectionPage/ScheduleConnection'
+import IntegrationsPage from '../pages/IntegrationsPage/IntegrationsPage'
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const [cookies] = useCookies(['token'])
@@ -64,6 +65,7 @@ const AppWithLayout = () => {
       <ProtectedRoute path="/dashboard/home" component={HomePage} exact />
       {/* <ProtectedRoute path="/dashboard/welcome" component={OnboardingPage} exact /> */}
       <ProtectedRoute path="/dashboard/schedule" component={ScheduleConnection} exact />
+      <ProtectedRoute path="/dashboard/integrations" component={IntegrationsPage} exact />
     </Layout>
   )
 }

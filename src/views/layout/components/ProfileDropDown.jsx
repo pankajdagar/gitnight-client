@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { classNames } from '../../../utils/helper'
 import { useSelector } from 'react-redux'
+import { useCookies } from 'react-cookie'
 
 const userNavigation = [
   { name: 'New Update', href: '#' },
@@ -11,6 +12,10 @@ const userNavigation = [
 
 const ProfileDropDown = () => {
   const { user } = useSelector((state) => state.user)
+  const [, , removeCookie] = useCookies(['token'])
+  const handleLogout = () => {
+    removeCookie('token', { path: '/' })
+  }
   return (
     <Menu as="div" className="ml-3 relative">
       {({ open }) => (
@@ -18,11 +23,7 @@ const ProfileDropDown = () => {
           <div>
             <Menu.Button className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               <span className="sr-only">Open user menu</span>
-              <img
-                className="h-8 w-8 rounded-full"
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt=""
-              />
+              <img className="h-8 w-8 rounded-full" src={`https://github.com/${user.username}.png?size=200`} alt="" />
             </Menu.Button>
           </div>
           <Transition
@@ -68,10 +69,10 @@ const ProfileDropDown = () => {
               <Menu.Item key="sign-out">
                 {({ active }) => (
                   <a
-                    href={'#'}
+                    onClick={handleLogout}
                     className={classNames(
                       active ? 'bg-gray-100' : '',
-                      'block px-4 py-2 text-sm text-gray-700 border-t',
+                      'block px-4 py-2 text-sm text-gray-700 border-t cursor-pointer',
                     )}
                   >
                     Sign Out
