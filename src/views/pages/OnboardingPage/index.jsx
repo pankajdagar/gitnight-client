@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getRepoData, getUserData } from '../../../api/onboardingHandlers'
+import { getRepoData } from '../../../api/onboardingHandlers'
 import GithubInfo from './components/GithubInfo'
 import Integrations from './components/Integrations'
 import LanguageInfo from './components/LanguageInfo'
@@ -10,12 +10,11 @@ import { ReactComponent as LogoDark } from 'icons/LogoDark.svg'
 import GettingReady from './components/GettingReady'
 
 const OnboardingPage = () => {
+  const { progressState } = useSelector((state) => state.onboarding)
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(getRepoData())
-    dispatch(getUserData())
   }, [dispatch])
-  const { progressState } = useSelector((state) => state.onboarding)
   return (
     <div className="min-h-screen bg-white flex overflow-y-hidden">
       {progressState < 5 ? (
@@ -29,7 +28,7 @@ const OnboardingPage = () => {
               {progressState === 1 && <GithubInfo />}
               {progressState === 2 && <LanguageInfo />}
               {progressState === 3 && <PersonalInfo />}
-              {progressState === 4 && <Integrations />}
+              {progressState === 4 && <Integrations isOnboarding={true} />}
             </div>
           </div>
           <div className="hidden lg:block relative w-3/12">

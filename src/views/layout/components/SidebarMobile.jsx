@@ -3,6 +3,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { classNames } from 'utils/helper'
 import { FolderIcon, HomeIcon, UsersIcon, XIcon } from '@heroicons/react/outline'
 import { ReactComponent as LogoLight } from 'icons/LogoLight.svg'
+import SidebarBottom from './SidebarBottom'
 
 const navigation = [
   { name: 'Home', href: '#', icon: HomeIcon, current: false },
@@ -34,7 +35,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           leaveFrom="translate-x-0"
           leaveTo="-translate-x-full"
         >
-          <div className="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-gray-800">
+          <div className="relative flex-1 flex flex-col max-w-xs w-full pt-5 bg-gray-800">
             <Transition.Child
               as={Fragment}
               enter="ease-in-out duration-300"
@@ -83,6 +84,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 ))}
               </nav>
             </div>
+            <SidebarBottom />
           </div>
         </Transition.Child>
         <div className="flex-shrink-0 w-14" aria-hidden="true">

@@ -4,10 +4,10 @@ import { ReactComponent as IconGoogle } from 'icons/IconGoogle.svg'
 const VideoCallPreference = () => {
   return (
     <>
-      <p className="mb-4">🎥  Video Call</p>
+      <p className="mb-4 dark:text-title-dark">🎥  Video Call</p>
       <div className="py-4 px-8 border rounded-md flex items-center space-x-5">
         <IconGoogle className="w-10 h-10" />
-        <div className="font-medium text-sm">
+        <div className="font-medium text-sm dark:text-text-dark">
           <p>Google Hangout</p>
           <p>Pankaj (<span className="text-blue-400">{`pnkjdagar25@gmail.com`}</span>)</p>
         </div>

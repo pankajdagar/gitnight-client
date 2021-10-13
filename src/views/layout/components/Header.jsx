@@ -4,7 +4,7 @@ import { MenuAlt2Icon } from '@heroicons/react/solid'
 
 const Header = ({ setSidebarOpen }) => {
   return (
-    <div className="relative z-10 flex-shrink-0 flex h-16 bg-black opacity-90 shadow">
+    <div className="relative z-10 flex-shrink-0 flex h-16 bg-header opacity-90 shadow dark:bg-header-dark">
       <button
         className="px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 lg:hidden"
         onClick={() => setSidebarOpen(true)}

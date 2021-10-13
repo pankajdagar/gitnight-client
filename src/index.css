@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .flex-basis-3 {
+    flex-basis: 33%;
+  }
+}
