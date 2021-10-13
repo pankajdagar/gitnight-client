@@ -39,11 +39,11 @@ const SetPreferences = () => {
 
   return (
     <div className="min-h-full bg-white shadow-md max-w-full">
-      <div className="bg-blue-50 p-16">
+      <div className="bg-blue-50 dark:bg-card-color-dark p-16">
         <div className="sm:flex justify-between sm:space-y-0 space-y-5">
           <div>
-            <h2 className="text-lg font-bold">Number of meetings</h2>
-            <p className="text-xs">Upto 6 connections a week</p>
+            <h2 className="text-lg font-bold dark:text-title-dark">Number of meetings</h2>
+            <p className="text-xs dark:text-text-dark">Upto 6 connections a week</p>
           </div>
           <div className="w-20">
             <CustomSelect data={daysData} selected={selectedDays} onSelect={setSelectedDays} label="Matches Per Week" />
@@ -63,10 +63,10 @@ const SetPreferences = () => {
                 />
               </div>
               <div className="ml-3 text-sm">
-                <label htmlFor={name} className="font-medium text-gray-700">
+                <label htmlFor={name} className="font-medium text-gray-700 dark:text-title-dark">
                   {text}
                 </label>
-                <p id={name} className="text-gray-500">
+                <p id={name} className="text-gray-500 dark:text-text-dark">
                   {supportText}
                 </p>
               </div>

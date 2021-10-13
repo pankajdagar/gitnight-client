@@ -33,7 +33,7 @@ const LearnPreference = () => {
 
   return (
     <>
-      <p className="mb-4">📚 I’d like to learn about </p>
+      <p className="mb-4 dark:text-title-dark">📚 I’d like to learn about </p>
       <div className="px-2 flex flex-wrap items-center">
         {!!scheduleConnectionData?.learnTopics?.length &&
           scheduleConnectionData?.learnTopics?.map(({ topicName, isSelected }, index) => (

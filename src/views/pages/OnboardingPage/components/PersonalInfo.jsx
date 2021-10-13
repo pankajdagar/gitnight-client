@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FieldArray, FormikProvider, useFormik } from 'formik'
 import validationHandler from 'utils/validationHandler'
 import { useDispatch, useSelector } from 'react-redux'
 import { setOnboardingProgressState } from 'state/Onboarding/onboardingActions'
 import { SocialArray } from '../../../../utils/constants'
-import { postOnboardingData } from '../../../../api/onboardingHandlers'
+import { getUserCity, postOnboardingData } from '../../../../api/onboardingHandlers'
 import { PlusIcon } from '@heroicons/react/solid'
 
 const PersonalInfo = () => {
@@ -20,6 +20,7 @@ const PersonalInfo = () => {
       website: userData.website,
       github: userData.username,
       country: 'India',
+      city: '',
       sideProjects: [''],
     },
     // validationSchema: validationHandler().onboarding,
@@ -34,13 +35,13 @@ const PersonalInfo = () => {
         linkedin: val.linkedIn,
         website: val.website,
         country: val.country,
+        city: val.city,
         languages: onboardingPreference.languages
           .filter(({ isSelected }) => !!isSelected)
           .map(({ languageName }) => languageName),
       }
       const sideProjects = val.sideProjects.filter((item) => item.length)
       if (sideProjects.length) postData['sideProjects'] = sideProjects
-      console.log(postData)
       try {
         await postOnboardingData(postData)
         dispatch(setOnboardingProgressState(progressState + 1))
@@ -49,6 +50,11 @@ const PersonalInfo = () => {
       }
     },
   })
+
+  useEffect(async () => {
+    const cityInfo = await getUserCity()
+    formik.setFieldValue('city',cityInfo.city)
+  },[])
 
   const handleBack = () => {
     dispatch(setOnboardingProgressState(progressState - 1))
@@ -136,6 +142,21 @@ const PersonalInfo = () => {
                     <option>United States</option>
                     <option>Canada</option>
                   </select>
+                </div>
+              </div>
+              <div className="sm:col-span-3">
+                <label htmlFor="city" className="block text-sm font-medium text-gray-700">
+                  City
+                </label>
+                <div className="mt-1">
+                  <input
+                    type="text"
+                    name="city"
+                    id="city"
+                    autoComplete="city"
+                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    {...formik.getFieldProps('city')}
+                  />
                 </div>
               </div>
             </div>

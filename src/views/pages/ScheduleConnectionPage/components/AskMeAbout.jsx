@@ -33,7 +33,7 @@ const AskMeAbout = () => {
 
   return (
     <>
-      <p className="mb-4">🗣 Ask me about</p>
+      <p className="mb-4 dark:text-title-dark">🗣 Ask me about</p>
       <div className="px-2 flex flex-wrap items-center">
         {!!scheduleConnectionData?.askTopics?.length &&
           scheduleConnectionData?.askTopics?.map(({ topicName, isSelected }, index) => (
