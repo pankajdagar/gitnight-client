@@ -10,7 +10,13 @@ import {
 export const scheduleConnectionInitialState = {
   scheduleConnectionLoading: false,
   scheduleConnectionError: false,
-  scheduleConnectionData: { matchDays: 'allWeek', connectionColor: '#F8A3A3' },
+  scheduleConnectionData: {
+    matchDays: 'Default',
+    connectionColor: '#F8A3A3',
+    matchPerWeek: 1,
+    commSetting: 1,
+    notifyBeforeMinutes: 10,
+  },
   scheduleConnectionSuccess: false,
 }
 

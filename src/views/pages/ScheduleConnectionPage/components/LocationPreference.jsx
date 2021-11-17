@@ -2,14 +2,17 @@ import React from 'react'
 import { useState } from 'react'
 import { RadioGroup } from '@headlessui/react'
 import { classNames } from 'utils/helper'
-
-const locations = [
-  { name: 'Anywhere on Gitnight' },
-  { name: 'Best Match in Bangalore' },
-  { name: 'Best Match in India' },
-]
+import { useSelector } from 'react-redux'
 
 const LocationPreference = () => {
+  const { scheduleConnectionData } = useSelector((state) => state.scheduleConnection)
+  const locations = !!scheduleConnectionData.city
+    ? [
+        { name: 'Anywhere on Gitnight' },
+        { name: `Best Match in ${scheduleConnectionData?.city}` },
+        { name: `Best Match in ${scheduleConnectionData?.country}` },
+      ]
+    : [{ name: 'Anywhere on Gitnight' }]
   const [selected, setSelected] = useState(locations[0])
   return (
     <>
@@ -45,7 +48,10 @@ const LocationPreference = () => {
                   <div className="ml-3 flex flex-col">
                     <RadioGroup.Label
                       as="span"
-                      className={classNames(checked ? 'text-indigo-900 dark:text-blue-400' : 'text-gray-900 dark:text-text-dark', 'block text-sm font-medium')}
+                      className={classNames(
+                        checked ? 'text-indigo-900 dark:text-blue-400' : 'text-gray-900 dark:text-text-dark',
+                        'block text-sm font-medium',
+                      )}
                     >
                       {location.name}
                     </RadioGroup.Label>

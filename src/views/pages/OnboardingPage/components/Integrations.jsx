@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ReactComponent as IconGoogle } from 'icons/IconGoogle.svg'
 import { ReactComponent as IconSlack } from 'icons/IconSlack.svg'
 import { ReactComponent as IconZoom } from 'icons/IconZoom.svg'
@@ -7,6 +7,7 @@ import SocialIntegrationCard from '../../../components/SocialIntegrationCard/Soc
 import GoogleSignIn from './GoogleSignIn'
 import { useDispatch, useSelector } from 'react-redux'
 import { setOnboardingProgressState } from '../../../../state/Onboarding/onboardingActions'
+import { getUserIntegration } from '../../../../api/integrationsHandlers'
 
 const platforms = [
   {
@@ -48,6 +49,9 @@ const platforms = [
 
 const Integrations = ({ isOnboarding = false }) => {
   const dispatch = useDispatch()
+  useEffect(() => {
+   !isOnboarding && dispatch(getUserIntegration())
+  }, [dispatch])
   const { progressState } = useSelector((state) => state.onboarding)
   const handleDashboardRedirect = () => {
     dispatch(setOnboardingProgressState(progressState + 1))

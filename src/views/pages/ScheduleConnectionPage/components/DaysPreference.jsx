@@ -5,17 +5,17 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const radioGroup = [
   {
-    name: 'allWeek',
+    name: 'Default',
     text: 'All Week',
     supportText: '',
   },
   {
-    name: 'weekday',
+    name: 'Weekdays',
     text: 'Only Weekdays',
     supportText: '(Monday to Friday)',
   },
   {
-    name: 'weekend',
+    name: 'Weekends',
     text: 'Only Weekends',
     supportText: '(Sat & Sunday)',
   },
@@ -29,9 +29,8 @@ const daysData = [
 ]
 
 const SetPreferences = () => {
-  const [selectedDays, setSelectedDays] = useState(daysData[0])
   const { scheduleConnectionData } = useSelector((state) => state.scheduleConnection)
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const handleMatchPrefTypeChange = (e) => {
     dispatch(setScheduleSettings({ matchDays: e.target.name }))
@@ -46,7 +45,12 @@ const SetPreferences = () => {
             <p className="text-xs dark:text-text-dark">Upto 6 connections a week</p>
           </div>
           <div className="w-20">
-            <CustomSelect data={daysData} selected={selectedDays} onSelect={setSelectedDays} label="Matches Per Week" />
+            <CustomSelect
+              data={daysData}
+              selected={daysData[scheduleConnectionData?.matchPerWeek - 1]}
+              onSelect={(data) => dispatch(setScheduleSettings({ matchPerWeek: data.id }))}
+              label="Matches Per Week"
+            />
           </div>
         </div>
         <fieldset className="sm:space-x-5 sm:space-y-0 sm:flex mt-5 space-y-5">

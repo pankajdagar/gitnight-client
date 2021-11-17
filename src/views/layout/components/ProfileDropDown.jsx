@@ -3,6 +3,7 @@ import { Menu, Transition } from '@headlessui/react'
 import { classNames } from '../../../utils/helper'
 import { useSelector } from 'react-redux'
 import { useCookies } from 'react-cookie'
+import { Link } from 'react-router-dom'
 
 const userNavigation = [
   { name: 'New Update', href: '#' },
@@ -42,8 +43,8 @@ const ProfileDropDown = () => {
             >
               <Menu.Item key="user-info">
                 {({ active }) => (
-                  <a
-                    href={'#'}
+                  <Link
+                    to={'/dashboard/profile'}
                     className={classNames(
                       active ? 'bg-gray-100' : '',
                       'block px-4 py-2 text-sm text-gray-700 border-b',
@@ -51,7 +52,7 @@ const ProfileDropDown = () => {
                   >
                     <p>Signed in as</p>
                     <p className="font-semibold">{user.username}</p>
-                  </a>
+                  </Link>
                 )}
               </Menu.Item>
               {userNavigation.map((item) => (
