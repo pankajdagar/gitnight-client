@@ -1,0 +1,1 @@
+export const SET_USER_IN_VIEW = "SET_USER_IN_VIEW"

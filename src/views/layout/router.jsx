@@ -10,6 +10,9 @@ import OnboardingPage from '../pages/OnboardingPage/'
 import Layout from '.'
 import ScheduleConnection from '../pages/ScheduleConnectionPage/ScheduleConnection'
 import IntegrationsPage from '../pages/IntegrationsPage/IntegrationsPage'
+import UserProfile from '../pages/UserProfile'
+import Connections from '../pages/Connections'
+import Invite from '../pages/Invite/Invite'
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const [cookies] = useCookies(['token'])
@@ -66,6 +69,9 @@ const AppWithLayout = () => {
       {/* <ProtectedRoute path="/dashboard/welcome" component={OnboardingPage} exact /> */}
       <ProtectedRoute path="/dashboard/schedule" component={ScheduleConnection} exact />
       <ProtectedRoute path="/dashboard/integrations" component={IntegrationsPage} exact />
+      <ProtectedRoute path="/dashboard/profile" component={UserProfile} exact />
+      <ProtectedRoute path="/dashboard/connections" component={Connections} exact />
+      <ProtectedRoute path="/dashboard/invite" component={Invite} exact />
     </Layout>
   )
 }

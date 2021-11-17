@@ -7,15 +7,13 @@ import LearnPreference from './components/LearnPreference'
 import { useDispatch, useSelector } from 'react-redux'
 import { setScheduleSettings } from 'state/ScheduleConnection/scheduleConnectionActions'
 import CustomSelect from '../HomePage/CustomSelect'
-import { postScheduleSettingsSuccess } from '../../../state/ScheduleConnection/scheduleConnectionActions'
 import ScheduleConnectionSuccess from './components/ScheduleConnectionSuccess'
-import { getScheduleSettings } from '../../../api/scheduleHandlers'
+import { getScheduleSettings, postScheduleSettings } from '../../../api/scheduleHandlers'
+import { getUserIntegration } from '../../../api/integrationsHandlers'
 
 const connectionColors = ['#F8A3A3', '#3E8ACF', '#9EAAE9', '#40D39E', '#723DE1', '#87C746']
 
-const commData = [
-  { id: 1, name: 'Email' },
-]
+const commData = [{ id: 1, name: 'Email' }]
 
 const timeData = [
   { id: 10, name: '10 Minutes' },
@@ -24,14 +22,26 @@ const timeData = [
 
 const ScheduleConnection = () => {
   const { scheduleConnectionData, scheduleConnectionSuccess } = useSelector((state) => state.scheduleConnection)
+
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(getScheduleSettings())
+    dispatch(getUserIntegration())
   }, [dispatch])
 
   const handleScheduleConnection = () => {
-    dispatch(postScheduleSettingsSuccess(true))
+    console.log(scheduleConnectionData)
+    const postData = {
+      matchPerWeek: scheduleConnectionData.matchPerWeek,
+      matchDays: scheduleConnectionData.matchDays,
+      notifyBeforeMinutes: scheduleConnectionData.notifyBeforeMinutes,
+      connectionColor: scheduleConnectionData.connectionColor,
+      askMeAbout: scheduleConnectionData?.askTopics?.map(data => data.topicName),
+      learnPreference: scheduleConnectionData?.learnTopics?.map(data => data.topicName),
+    }
+    console.log(postData)
+    dispatch(postScheduleSettings(postData))
   }
 
   return (
@@ -71,13 +81,13 @@ const ScheduleConnection = () => {
               <div className="flex space-x-2 items-center">
                 <CustomSelect
                   data={commData}
-                  selected={scheduleConnectionData?.commSetting || commData[0]}
-                  onSelect={(comm) => dispatch(setScheduleSettings({ commSetting: comm }))}
+                  selected={commData.find((comm) => comm.id === scheduleConnectionData?.commSetting) || commData[0]}
+                  onSelect={(comm) => dispatch(setScheduleSettings({ commSetting: comm.id }))}
                 />
                 <CustomSelect
                   data={timeData}
-                  selected={scheduleConnectionData?.timeSetting || timeData[0]}
-                  onSelect={(time) => dispatch(setScheduleSettings({ timeSetting: time }))}
+                  selected={timeData.find((time) => time.id === scheduleConnectionData?.notifyBeforeMinutes)}
+                  onSelect={(time) => dispatch(setScheduleSettings({ notifyBeforeMinutes: time.id }))}
                 />
               </div>
             </div>
