@@ -29,7 +29,7 @@ const scheduleConnectionReducer = (state = scheduleConnectionInitialState, actio
       return combineObject(state, { scheduleConnectionError: true, scheduleConnectionLoading: false })
 
     case GET_SCHEDULE_SETTINGS_SUCCESS:
-      return combineObject(state, { scheduleConnectionData: action.payload })
+      return combineObject(state, { scheduleConnectionData: action.payload, scheduleConnectionLoading: false })
 
     case SET_SCHEDULE_SETTINGS:
       return combineObject(state, { scheduleConnectionData: { ...state.scheduleConnectionData, ...action.payload } })

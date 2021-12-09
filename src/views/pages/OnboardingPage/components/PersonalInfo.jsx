@@ -106,7 +106,7 @@ const PersonalInfo = () => {
                     name="firstName"
                     id="firstName"
                     autoComplete="given-name"
-                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
                     {...formik.getFieldProps('firstName')}
                   />
                 </div>
@@ -121,7 +121,7 @@ const PersonalInfo = () => {
                     name="lastName"
                     id="lastName"
                     autoComplete="family-name"
-                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
                     {...formik.getFieldProps('lastName')}
                   />
                 </div>
@@ -135,7 +135,7 @@ const PersonalInfo = () => {
                     id="country"
                     name="country"
                     autoComplete="country"
-                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
                     {...formik.getFieldProps('country')}
                   >
                     <option>India</option>
@@ -154,7 +154,7 @@ const PersonalInfo = () => {
                     name="city"
                     id="city"
                     autoComplete="city"
-                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
                     {...formik.getFieldProps('city')}
                   />
                 </div>
@@ -170,7 +170,7 @@ const PersonalInfo = () => {
                 id="about"
                 name="about"
                 rows={3}
-                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border border-gray-300 rounded-md"
                 {...formik.getFieldProps('introduction')}
               />
             </div>
@@ -194,7 +194,7 @@ const PersonalInfo = () => {
                       type="text"
                       name={platform.dataTag}
                       id={platform.dataTag}
-                      className={`flex-1 border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 rounded-none rounded-r-md sm:text-sm ${
+                      className={`flex-1 border-gray-300 focus:ring-blue-500 focus:border-blue-500 block w-full min-w-0 rounded-none rounded-r-md sm:text-sm ${
                         !platform.prefix ? 'rounded-l-md' : ''
                       }`}
                       {...formik.getFieldProps(platform.dataTag)}
@@ -232,7 +232,7 @@ const PersonalInfo = () => {
                                 type="text"
                                 name={`sideProjects.${i}`}
                                 id={i}
-                                className="flex-1 border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 rounded-md sm:text-sm"
+                                className="flex-1 border-gray-300 focus:ring-blue-500 focus:border-blue-500 block w-full min-w-0 rounded-md sm:text-sm"
                                 {...formik.getFieldProps(`sideProjects.${i}`)}
                               />
                             </div>
