@@ -100,7 +100,7 @@ const GithubInfo = () => {
                 <div className="flex-shrink-0">
                   <button
                     type="button"
-                    className="inline-flex items-center py-2 px-3 border border-transparent rounded-full bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="inline-flex items-center py-2 px-3 border border-transparent rounded-full bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     onClick={() => handleAddOrRemoveRepo(repo)}
                   >
                     {!onboardingPreference?.repoIds?.includes(repo.id) ? (

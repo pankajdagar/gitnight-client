@@ -12,7 +12,7 @@ const userNavigation = [
 ]
 
 const ProfileDropDown = () => {
-  const { user } = useSelector((state) => state.user)
+  const { profileData } = useSelector((state) => state.user)
   const [, , removeCookie] = useCookies(['token'])
   const handleLogout = () => {
     removeCookie('token', { path: '/' })
@@ -22,9 +22,9 @@ const ProfileDropDown = () => {
       {({ open }) => (
         <>
           <div>
-            <Menu.Button className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <Menu.Button className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
               <span className="sr-only">Open user menu</span>
-              <img className="h-8 w-8 rounded-full" src={`https://github.com/${user.username}.png?size=200`} alt="" />
+              <img className="h-8 w-8 rounded-full" src={`https://github.com/${profileData.username}.png?size=200`} alt="" />
             </Menu.Button>
           </div>
           <Transition
@@ -51,7 +51,7 @@ const ProfileDropDown = () => {
                     )}
                   >
                     <p>Signed in as</p>
-                    <p className="font-semibold">{user.username}</p>
+                    <p className="font-semibold">{profileData.username}</p>
                   </Link>
                 )}
               </Menu.Item>
