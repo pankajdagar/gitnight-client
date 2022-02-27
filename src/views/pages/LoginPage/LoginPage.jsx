@@ -6,7 +6,7 @@ const LoginPage = (props) => {
   const { location } = props
   useEffect(() => {
     location?.state?.from?.pathname && localStorage.setItem('landingUrl', location?.state?.from?.pathname)
-  }, [])
+  }, [location])
   return (
     <div>
       <div className="min-h-screen bg-white flex">

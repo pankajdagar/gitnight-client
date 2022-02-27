@@ -9,7 +9,7 @@ const GettingReady = () => {
     return () => {
       clearTimeout(timer)
     }
-  }, [])
+  }, [history])
   return (
     <div className="flex items-center justify-center h-screen w-screen bg-gray-50 flex-col space-y-8">
       <LogoDark className="h-16 w-40" />

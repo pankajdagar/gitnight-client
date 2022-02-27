@@ -17,7 +17,12 @@ const MatchCard = ({ data }) => {
         <div className="hidden md:flex md:flex-basis-3">
           <div>
             <p className="text-sm text-gray-700 dark:text-link-dark">Popular Repo</p>
-            <p className="flex items-center text-sm text-blue-600 dark:text-link-dark">{data.popularRepo.name}</p>
+            <p
+              className="items-center text-sm text-blue-600 dark:text-link-dark truncate"
+              style={{ maxWidth: '90px' }}
+            >
+              {data?.popularRepo?.name}
+            </p>
             <p className="text-xs text-gray-500 dark:text-text-dark">
               {!!data.popularRepo?.description?.length && data.popularRepo.description}
             </p>

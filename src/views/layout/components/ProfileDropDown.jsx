@@ -69,7 +69,7 @@ const ProfileDropDown = () => {
               ))}
               <Menu.Item key="sign-out">
                 {({ active }) => (
-                  <a
+                  <button
                     onClick={handleLogout}
                     className={classNames(
                       active ? 'bg-gray-100' : '',
@@ -77,7 +77,7 @@ const ProfileDropDown = () => {
                     )}
                   >
                     Sign Out
-                  </a>
+                  </button>
                 )}
               </Menu.Item>
             </Menu.Items>

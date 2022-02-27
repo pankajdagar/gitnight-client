@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import CustomSelect from '../../HomePage/CustomSelect'
 import { setScheduleSettings } from 'state/ScheduleConnection/scheduleConnectionActions'
 import { useDispatch, useSelector } from 'react-redux'

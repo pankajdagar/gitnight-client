@@ -3,22 +3,22 @@ import { FilterIcon, SearchIcon } from '@heroicons/react/solid'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserProfile } from '../../../../api/pastConnectionHandlers'
 
-const directory = [
-  {
-    id: 1,
-    name: 'Mrinal Raj',
-    role: 'Co-Founder / CTO',
-    imageUrl: 'https://github.com/mrinalraj.png?size=200',
-    username: 'mrinalraj',
-  },
-  {
-    id: 2,
-    name: 'Pankaj Dagar',
-    role: 'Co-Founder / CEO',
-    imageUrl: 'https://github.com/pankajdagar.png?size=200',
-    username: 'pankajdagar',
-  },
-]
+// const directory = [
+//   {
+//     id: 1,
+//     name: 'Mrinal Raj',
+//     role: 'Co-Founder / CTO',
+//     imageUrl: 'https://github.com/mrinalraj.png?size=200',
+//     username: 'mrinalraj',
+//   },
+//   {
+//     id: 2,
+//     name: 'Pankaj Dagar',
+//     role: 'Co-Founder / CEO',
+//     imageUrl: 'https://github.com/pankajdagar.png?size=200',
+//     username: 'pankajdagar',
+//   },
+// ]
 
 const MatchList = () => {
   const dispatch = useDispatch()
@@ -61,19 +61,19 @@ const MatchList = () => {
           {!!allConnectionsData?.length &&
             allConnectionsData.map((person) => (
               <div key={person.id} className="relative" onClick={() => dispatch(getUserProfile(person.username))}>
-                <ul role="list" className="relative z-0 divide-y divide-gray-200 dark:divide-text-dark">
+                <ul className="relative z-0 divide-y divide-gray-200 dark:divide-text-dark">
                   <li key={person.id}>
                     <div className="relative px-6 py-5 flex items-center space-x-3 hover:bg-gray-50 dark:hover:bg-hover-dark focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-500">
                       <div className="flex-shrink-0">
                         <img className="h-10 w-10 rounded-full" src={person.avatar} alt="" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <a className="focus:outline-none">
+                        <button className="focus:outline-none">
                           {/* Extend touch target to entire panel */}
                           <span className="absolute inset-0" aria-hidden="true" />
                           <p className="text-sm font-medium text-gray-900 dark:text-title-dark">{`${person.firstName} ${person.lastName}`}</p>
                           <p className="text-sm text-gray-500 truncate dark:text-text-dark">{person.role}</p>
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </li>

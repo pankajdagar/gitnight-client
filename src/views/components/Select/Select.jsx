@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 
@@ -7,10 +7,9 @@ const classNames = (...classes) => {
 }
 
 const Select = ({ onSelect, data }) => {
-  const [selected, setSelected] = useState("")
 
   return (
-    <Listbox value={selected} onChange={onSelect}>
+    <Listbox value={""} onChange={onSelect}>
       {({ open }) => (
         <>
           <div className="mt-1 relative w-3/5 lg:w-2/5">
