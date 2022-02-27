@@ -51,10 +51,13 @@ const PersonalInfo = () => {
     },
   })
 
-  useEffect(async () => {
-    const cityInfo = await getUserCity()
-    formik.setFieldValue('city',cityInfo.city)
-  },[])
+  useEffect(() => {
+    const getCity = async () => {
+      const cityInfo = await getUserCity()
+      formik.setFieldValue('city',cityInfo.city)
+    }
+    getCity()
+  },[formik])
 
   const handleBack = () => {
     dispatch(setOnboardingProgressState(progressState - 1))

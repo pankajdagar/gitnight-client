@@ -1,6 +1,6 @@
 import * as Yup from 'yup'
 
-export default () => {
+const validationHandler = () => {
   return {
     onboarding: Yup.object().shape({
       firstName: Yup.string()
@@ -17,3 +17,5 @@ export default () => {
     }),
   }
 }
+
+export default validationHandler

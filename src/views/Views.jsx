@@ -12,7 +12,7 @@ const AuthRoute = ({ component: Component, ...rest }) => {
     if (cookies.hasOwnProperty('token') && cookies.token.length) {
       history.replace('/')
     }
-  }, [])
+  }, [cookies, history])
   return (
     <Route
       {...rest}

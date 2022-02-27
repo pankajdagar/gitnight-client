@@ -1,13 +1,9 @@
 import React from 'react'
 import { ReactComponent as LogoLight } from 'icons/LogoLight.svg'
 import { Link, NavLink } from 'react-router-dom'
-import { Switch } from '@headlessui/react'
-import { useDarkMode } from '../../../hooks/useDarkMode'
-import { classNames } from 'utils/helper'
 import SidebarBottom from './SidebarBottom'
 
 const SidebarDesktop = ({ navigation }) => {
-  const [isDark, setIsDark] = useDarkMode()
   return (
     <div className="hidden lg:flex lg:flex-shrink-0">
       <div className="flex flex-col w-64">

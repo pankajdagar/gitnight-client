@@ -51,7 +51,7 @@ const Integrations = ({ isOnboarding = false }) => {
   const dispatch = useDispatch()
   useEffect(() => {
    !isOnboarding && dispatch(getUserIntegration())
-  }, [dispatch])
+  }, [dispatch, isOnboarding])
   const { progressState } = useSelector((state) => state.onboarding)
   const handleDashboardRedirect = () => {
     dispatch(setOnboardingProgressState(progressState + 1))

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom'
 import HomePage from '../pages/HomePage/HomePage'
 import { useCookies } from 'react-cookie'
@@ -39,20 +39,22 @@ const Router = () => {
   const [cookies] = useCookies(['token'])
   const history = useHistory()
   const dispatch = useDispatch()
-  useEffect(() => {
-    if (cookies.hasOwnProperty('token') && cookies?.token.length) {
-      getUserDetails()
-    }
-  }, [])
 
-  const getUserDetails = async () => {
+  const getUserDetails = useCallback(async () => {
     const [error, response] = await authRequest.get('/user/me')
     if (!error && response) {
       dispatch(setUserData(response.data))
       if (!response?.data?.onboardingComplete) history.replace('/dashboard/welcome')
       else if (history.location.pathname === '/dashboard') history.replace('/dashboard/home')
     }
-  }
+  }, [dispatch, history])
+
+  useEffect(() => {
+    if (cookies.hasOwnProperty('token') && cookies?.token.length) {
+      getUserDetails()
+    }
+  }, [cookies, getUserDetails])
+
   return (
     <Switch>
       <ProtectedRoute path="/dashboard/welcome" component={OnboardingPage} exact />
