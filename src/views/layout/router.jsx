@@ -41,7 +41,7 @@ const Router = () => {
   const dispatch = useDispatch()
 
   const getUserDetails = useCallback(async () => {
-    const [error, response] = await authRequest.get('/user/me')
+    const [error, response] = await authRequest.get('/api/user/me')
     if (!error && response) {
       dispatch(setUserData(response.data))
       if (!response?.data?.onboardingComplete) history.replace('/dashboard/welcome')

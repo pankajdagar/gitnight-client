@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 const userNavigation = [
   { name: 'New Update', href: '#' },
   { name: 'Help', href: '#' },
-  { name: 'Settings', href: '#' },
+  { name: 'Settings', href: '/dashboard/schedule' },
 ]
 
 const ProfileDropDown = () => {
