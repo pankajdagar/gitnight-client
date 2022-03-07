@@ -14,7 +14,7 @@ import { authRequest } from 'services/apiService'
 
 export const getRepoData = () => async (dispatch) => {
   dispatch(getRepoDataRequest)
-  const [error, response] = await authRequest.get('/onboarding/repos')
+  const [error, response] = await authRequest.get('/api/onboarding/repos')
   if (error || !response?.data) {
     dispatch(getRepoDataFailure)
     return Promise.reject(error)
@@ -32,7 +32,7 @@ export const getRepoData = () => async (dispatch) => {
 
 export const getUserData = () => async (dispatch) => {
   dispatch(getUserDataRequest)
-  const [error, response] = await authRequest.get('/onboarding/user')
+  const [error, response] = await authRequest.get('/api/onboarding/user')
   if (error || !response?.data) {
     dispatch(getUserDataFailure)
     return Promise.reject(error)
@@ -50,7 +50,7 @@ export const getUserData = () => async (dispatch) => {
 
 export const searchRepo = (query) => async (dispatch) => {
   dispatch(searchRepoDataRequest)
-  const [error, response] = await authRequest.get('/user/repos/search', query)
+  const [error, response] = await authRequest.get('/api/user/repo/search', query)
   if (error || !response?.data) {
     dispatch(searchRepoDataFailure)
     return Promise.reject(error)
@@ -61,7 +61,7 @@ export const searchRepo = (query) => async (dispatch) => {
 }
 
 export const postOnboardingData = async (data) => {
-  const [error, response] = await authRequest.post('/onboarding', data)
+  const [error, response] = await authRequest.post('/api/onboarding', data)
   if (error) {
     return Promise.reject(error)
   } else {
