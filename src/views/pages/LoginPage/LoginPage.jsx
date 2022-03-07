@@ -1,12 +1,47 @@
 import dayjs from 'dayjs'
 import React from 'react'
+import { useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
 import { useEffect } from 'react'
 
 const LoginPage = (props) => {
   const { location } = props
+  const history = useHistory()
+  
   useEffect(() => {
     location?.state?.from?.pathname && localStorage.setItem('landingUrl', location?.state?.from?.pathname)
   }, [location])
+
+  useEffect(() => {
+    return window.removeEventListener("message", loginListener)
+  },[])
+  const [, setCookie] = useCookies(['token'])
+
+  const loginListener = useCallback((event) => {
+    console.log("message", event)
+    if(event.origin === window.origin) {
+      if(event.data.hasOwnProperty("login") && event.data?.login?.success) {
+        const token = event.data.login.token
+        setCookie('token', token, { path: '/', maxAge: 172800 })
+        const landingUrl = localStorage.getItem('landingUrl')
+        if (landingUrl?.length && landingUrl !== '/dashboard') {
+          history.replace(`${landingUrl}`)
+        } else {
+          history.replace('/dashboard')
+        }
+      }
+    }
+  }, [history])
+
+  const openLogin = useCallback(() => {
+    const params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
+    width=200,height=300,left=100,top=100`
+    const loginWindow = window.open(`${process.env.REACT_APP_API_URL}/auth/login/github?origin=${window.location.origin}`, params)
+    loginWindow.focus()
+    loginWindow.addEventListener("message", loginListener, false)
+  }, [])
+
   return (
     <div>
       <div className="min-h-screen bg-white flex">
@@ -28,12 +63,7 @@ const LoginPage = (props) => {
                   <div>
                     <button
                       className="w-full lg:w-80 inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-black text-sm font-medium text-white hover:bg-gray-900 focus:outline-none"
-                      onClick={() =>
-                        window.open(
-                          `${process.env.REACT_APP_API_URL}/auth/github?origin=${window.location.origin}`,
-                          '_self',
-                        )
-                      }
+                      onClick={openLogin}
                     >
                       <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                         <path

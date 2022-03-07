@@ -8,7 +8,7 @@ import { postScheduleSettingsSuccess } from '../state/ScheduleConnection/schedul
 
 export const getScheduleSettings = () => async (dispatch) => {
   dispatch(getScheduleSettingsRequest)
-  const [error, response] = await authRequest.get('/user/settings')
+  const [error, response] = await authRequest.get('/api/settings')
   if (error || !response?.data) {
     dispatch(getScheduleSettingsFailure)
     return Promise.reject(error)
@@ -19,7 +19,7 @@ export const getScheduleSettings = () => async (dispatch) => {
 }
 
 export const postScheduleSettings = (data) => async (dispatch) => {
-  const [error, response] = await authRequest.post('/user/settings', data)
+  const [error, response] = await authRequest.post('/api/settings', data)
   if (error) {
     return Promise.reject(error)
   } else {

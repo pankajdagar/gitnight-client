@@ -11,12 +11,13 @@ const GoogleSignIn = () => {
   const isGoogleIntegrated =
     integrationsData?.length && integrationsData?.find(({ integrationName }) => integrationName === 'GOOGLE')
   const onSuccess = async (res) => {
+    console.log(res)
     const integrationData = [
       {
         integrationName: 'GOOGLE',
         email: res.profileObj.email,
-        accessToken: 'abc',
-        details: {},
+        accessToken: res.accessToken,
+        details: res.wc,
       },
     ]
     try {

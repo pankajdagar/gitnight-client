@@ -13,7 +13,6 @@ const moduleNameMapping = {
 
 const Header = ({ setSidebarOpen }) => {
   let location = useLocation()
-  console.log(location.pathname)
   return (
     <div className="relative z-10 flex-shrink-0 flex h-16 bg-header opacity-90 shadow dark:bg-header-dark">
       <button

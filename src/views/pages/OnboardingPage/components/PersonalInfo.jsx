@@ -57,7 +57,7 @@ const PersonalInfo = () => {
       formik.setFieldValue('city',cityInfo.city)
     }
     getCity()
-  },[formik])
+  },[])
 
   const handleBack = () => {
     dispatch(setOnboardingProgressState(progressState - 1))
